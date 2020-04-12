@@ -44,8 +44,8 @@ def affine_transform(t_affine,input_image,output_image):
             x_old=j-x_offset
             #to see
             y_old=y_offset-i
-            x_new=t_affine[0][0]*x_old+t_affine[0][1]*y_old+t_affine[0][2]
-            y_new=t_affine[1][0]*x_old+t_affine[1][1]*y_old+t_affine[1][2]
+            x_new=int(t_affine[0][0]*x_old+t_affine[0][1]*y_old+t_affine[0][2])
+            y_new=int(t_affine[1][0]*x_old+t_affine[1][1]*y_old+t_affine[1][2])
             
 
             if abs(int(y_new-y_offset)) >=height or abs(int(x_new+x_offset))>=width:
@@ -60,34 +60,12 @@ def affine_transform(t_affine,input_image,output_image):
                 # continue
             # img_out[i][j]=img_in[math.floor(i/t_affine[1][1])][math.floor(j/t_affine[0][0])]
     
-    plt.imshow(nn_interpolate(img_out,1),cmap="gray")
+    print("Iam here\n")
+    plt.imshow(img_out,cmap="gray")
     plt.show()
 
 
-# Nearest neighbor interpolation 
-def nn_interpolate(image, scale_factor):
 
-	# Extract size
-	(rows, cols) = image.shape
-	scaled_height = rows * scale_factor
-	scaled_weight = cols * scale_factor
-
-	# Compute ratio
-	row_ratio = rows / scaled_height
-	col_ratio = cols / scaled_weight
-
-	row_position = np.floor(np.arange(scaled_height) * row_ratio).astype(int)
-	column_position = np.floor(np.arange(scaled_weight) * col_ratio).astype(int)
-	
-	# Initialize scaled image
-	scaled_image = np.zeros((scaled_height, scaled_weight), np.uint8)
-
-	for i in range(scaled_height):
-		for j in range(scaled_weight):
-			scaled_image[i, j] = image[row_position[i], column_position[j]]
-
-	return scaled_image
-affine_transform(t_affine,argv[1],argv[2])
 """
 arr=np.zeros((101,201),dtype=int)
 x_offset=math.floor(len(arr)/2)
