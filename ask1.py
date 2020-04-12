@@ -31,6 +31,7 @@ def thresholding(input_image,output_image,threshold):
         img_out=Image.fromarray(img_in).convert('RGB')
     else :
         img_out=Image.fromarray(img_in)
+    # save the image
     img_out.save(output_image)
 
     plt.imshow(img_in,cmap="gray")

@@ -3,11 +3,8 @@ import matplotlib.pyplot as plt
 from PIL import Image
 from sys import argv
 import math
-# import cv2
 
-
-# img=cv2.resize(imgin,300,650)
-
+#Nearest neighbor interpolation is not completed
 
 
 
@@ -22,18 +19,16 @@ t_affine[1][2]=argv[8]
 t_affine[2][2]=1
 
 
-# t_affine=[argv[3],argv[4],argv[5],argv[6],argv[7],argv[8],0,0,1]
-
 
 def affine_transform(t_affine,input_image,output_image):
+    #open input image
     img_in=np.array(Image.open(input_image))
-    print(img_in)
     height=len(img_in)
     width=len(img_in[0])
-    print(width)
-    print(height)
-    img_out=np.zeros((height,width))
+
+    img_out=np.zeros((height,width),dtype=np.int)
     
+    #We use the offset variables so that i can move the center(0,0) of the image  
     x_offset=math.floor(width/2)
     y_offset=math.floor(height/2)
 
@@ -42,39 +37,20 @@ def affine_transform(t_affine,input_image,output_image):
             # transform thecoordinates of the pixel so that we can 
             #have the (0,0) point int the center of the image
             x_old=j-x_offset
-            #to see
             y_old=y_offset-i
+
             x_new=int(t_affine[0][0]*x_old+t_affine[0][1]*y_old+t_affine[0][2])
             y_new=int(t_affine[1][0]*x_old+t_affine[1][1]*y_old+t_affine[1][2])
             
-
+            #if the new coordinates of a point are outside the new image then continue
             if abs(int(y_new-y_offset)) >=height or abs(int(x_new+x_offset))>=width:
                 continue
-            # print("Coordinates: %d %d \n"%(abs(int(y_old-y_offset)),abs(int(x_old+x_offset))))
+            
             #we do the reverse transform to read the pixels from img
             img_out[abs(int(y_new-y_offset))][abs(int(x_new+x_offset))]=img_in[abs(int(y_old-y_offset))][abs(int(x_old+x_offset))]
-    # img_out=nn_interpolate(img_out,1)
-    # for i in range(height):
-        # for j in range(width):
-            # if math.floor(i/t_affine[1][1])>=height or math.floor(j/t_affine[0][0])>=width:
-                # continue
-            # img_out[i][j]=img_in[math.floor(i/t_affine[1][1])][math.floor(j/t_affine[0][0])]
     
-    print("Iam here\n")
     plt.imshow(img_out,cmap="gray")
     plt.show()
 
 
-
-"""
-arr=np.zeros((101,201),dtype=int)
-x_offset=math.floor(len(arr)/2)
-y_offset=math.floor(len(arr[0])/2)
-counter=0
-for i in range(len(arr)):
-    for j in rangelen(arr[0])):
-        arr[i][j]=counter-offset
-        counter+=1
-    counter=0
-print(arr)
-"""
+affine_transform(t_affine,argv[1],argv[2])
